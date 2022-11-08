@@ -1,0 +1,20 @@
+version: '3.4'
+
+networks:
+  app-tier:
+    driver: bridge
+
+services:
+  analytics:
+    env_file:
+      - env.list
+    image: analytics:v1
+    container_name: analytics
+    networks:
+      - app-tier
+    ports:
+      - 5000:5000
+    volumes:
+      - "./code:/code"
+    entrypoint: ["python3", "/code/app.py"]
+    

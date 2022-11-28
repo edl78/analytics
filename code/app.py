@@ -33,18 +33,18 @@ def start_worker_thread(task_name):
     if(task_name == 'all'):
         task_cursor = weeds.get_all_db_tasks()        
         for task in task_cursor:
-            run_tsne_on_task(task['name'])
-
-    elif(task_name == 'europ'):
-        run_tsne_on_task(task_name)
-        
+            run_tsne_on_task(task['name'])    
     else:
-        task_name = task_name.replace('_', ' ')
-        task_cursor = weeds.get_task_data(task_name)        
+        #bug: in the tasks collection, name is given with underscore
+        #task_name = task_name.replace('_', ' ')
+        task_cursor = weeds.get_task_data(task_name)
+        print('check db for matching task...')
         for task in task_cursor:
             #safe guard since seg_(task_name) and (task_name)
             #is returned
+            print(task['name'])
             if(task['name'] == task_name):
+                print('found task, start t-sne')
                 run_tsne_on_task(task['name'])
     
     #test this and see if memory allocation after t-sne run is back to normal,
@@ -80,8 +80,11 @@ def run_tsne_on_task(task_name):
     pickle_file_path = pickle_save_dir + '/pd.pkl'
     tsne.set_pd_dataset(pd_dataset_file=pickle_file_path, class_map=class_map)
     print('generate clusters')
-    tsne.generate_clusters()
-    print('done, clean up')
+    try:
+        tsne.generate_clusters()
+    except (FileNotFoundError, TypeError) as e:
+        print('error reading file for task: ' +  task_name)
+    print('done, clean up', flush=True)
     #remove big file after cluster generation
     os.remove(pickle_file_path)    
 
@@ -89,7 +92,7 @@ def run_tsne_on_task(task_name):
 
 def main():    
     print('starting flask server for analytics')
-    app.run(debug=True, host='0.0.0.0', port=5001, threaded=True)
+    app.run(debug=True, host='0.0.0.0', port=int(os.environ['ANALYTICS_PORT']), threaded=True)
 
 
 

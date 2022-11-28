@@ -113,11 +113,10 @@ class T_SNE():
                 
                 labels.append(label_map[label_cpu])
         
-        except FileNotFoundError as e:
-            print('error reading img file on path')                       
-            return
+        except (FileNotFoundError, TypeError) as e:            
+            print('error reading img file on path', flush=True)
+            raise FileNotFoundError
             
-
         #loop over 5-50 in perplexity and save images for get request? Very fast compute on gpu.
         print('run t-sne')
         tsne = TSNE(n_components=2, perplexity=25).fit_transform(np.squeeze(features))

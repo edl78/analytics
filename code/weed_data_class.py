@@ -21,11 +21,18 @@ class WeedData(Dataset):
         xmax=0
         ymin=0
         ymax=0
-        try:            
-            img = Image.open(entry["img_path"]).convert("RGB")
-        except FileNotFoundError as e:
-            print('failed to read img data!')
-            raise
+        try:
+            img_path = entry["img_path"]
+            print('img_path: ' +  img_path)
+            if(img_path[0] == '/'):
+                #starting with absolute path
+                path_split =  img_path.split('/')
+                img_path = '/weed_data/' + '/'.join(path_split[2:])
+                print('new img path: ' + img_path)
+            img = Image.open(img_path).convert("RGB")
+        except (FileNotFoundError, TypeError) as e:
+            print(e, flush=True)
+            raise FileNotFoundError
         if(entry['shape_type'] == 'rectangle'):
             xmin = float(box["xmin"])
             xmax = float(box["xmax"])
@@ -64,7 +71,14 @@ class WeedData(Dataset):
         entry = self.df.iloc[index]  
         box = entry["points"]
         try:
-            img = Image.open(entry["img_path"]).convert("RGB")
+            img_path = entry["img_path"]
+            print('img_path: ' +  img_path)
+            if(img_path[0] == '/'):
+                #starting with absolute path
+                path_split =  img_path.split('/')
+                img_path = '/weed_data/' + '/'.join(path_split[2:])
+                print('new img path: ' + img_path)
+            img = Image.open(img_path).convert("RGB")
         except FileNotFoundError as e:
             print('failed to read img data!')
             raise

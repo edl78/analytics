@@ -7,7 +7,7 @@ import os
 class Weeds():
     def __init__(self):
         self.db_client = MongoClient(host='0.0.0.0', port=27017, 
-                                        username=os.environ['MONGO_USERNAME'], password=os.environ['MONGO_PASSWORD'],
+                                        username=os.environ['MONGODB_USERNAME'], password=os.environ['MONGODB_PASSWORD'],
                                         connect=True, authSource="annotations")  
 
         self.db = self.db_client['annotations']

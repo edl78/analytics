@@ -1,20 +1,16 @@
 version: '3.4'
 
-networks:
-  app-tier:
-    driver: bridge
-
 services:
   analytics:
+    runtime: nvidia
+    shm_size: 4g
     env_file:
       - env.list
-    image: analytics:v1
+    image: analytics:v2
     container_name: analytics
-    networks:
-      - app-tier
-    ports:
-      - 5000:5000
+    network_mode: "host"    
     volumes:
       - "./code:/code"
+      - ${WEED_DATA_PATH}:/weed_data 
     entrypoint: ["python3", "/code/app.py"]
     

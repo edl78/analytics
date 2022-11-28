@@ -2,7 +2,8 @@
 - T-distributed Stochastic Neighbour Embedding. PCA-like analysis of dimensionality reduction, applied on featurespace from Resnet101 up until softmax layer. Trained on imagenet. So features are general for imagenet. Do the same analysis on fine tuned network for better class separation. The main idea here is to map clusters of data in feature space and gain insight into feature space distributions.
 
 ## Build and run
-- First fill in env.list with username, password and other data, do not check this in.
+- First fill in env.list with username, password and other data such as downloaded weed_data path, do not check this in.
+- Note that this service also needs access to the downloaded weed_data for analysis.
 - Build with `sh build_analytics_no_conda.sh` and run with `docker-compose up -d` 
 - run_analytics.sh is provided for easier debug but require a manual start of code/app.py. If desired, analytics can also be added to the weed_annotation docker-compose. Analytics should be started before weed_annotations.
 

@@ -3,7 +3,7 @@
 
 ## Build and run
 - First fill in env.list with username, password and other data, do not check this in.
-- Build with `sh build_analytics.sh` and run with `docker-compose up -d` 
+- Build with `sh build_analytics_no_conda.sh` and run with `docker-compose up -d` 
 - run_analytics.sh is provided for easier debug but require a manual start of code/app.py. If desired, analytics can also be added to the weed_annotation docker-compose. Analytics should be started before weed_annotations.
 
 ## Architecture

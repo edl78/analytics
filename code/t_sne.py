@@ -13,6 +13,8 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 import os
 
+#inspiration for this code comes from this place (no information regarding license): 
+#https://learnopencv.com/t-sne-for-feature-visualization
 
 # Define the architecture by modifying resnet.
 # Original code is here http://tiny.cc/8zpmmz 

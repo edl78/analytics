@@ -121,7 +121,7 @@ class T_SNE():
             
         #loop over 5-50 in perplexity and save images for get request? Very fast compute on gpu.
         print('run t-sne')
-        tsne = TSNE(n_components=2, perplexity=25).fit_transform(np.squeeze(features))
+        tsne = TSNE(n_components=2, perplexity=25, method="barnes_hut").fit_transform(np.squeeze(features))
         
         # extract x and y coordinates representing the positions of the images on T-SNE plot
         tx = tsne[:, 0]

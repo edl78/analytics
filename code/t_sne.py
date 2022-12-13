@@ -115,13 +115,13 @@ class T_SNE():
                 
                 labels.append(label_map[label_cpu])
         
-        except (FileNotFoundError, TypeError) as e:            
+        except (FileNotFoundError, TypeError) as e:
             print('error reading img file on path', flush=True)
             raise FileNotFoundError
             
-        #loop over 5-50 in perplexity and save images for get request? Very fast compute on gpu.
-        print('run t-sne')
-        tsne = TSNE(n_components=2, perplexity=25, method="barnes_hut").fit_transform(np.squeeze(features))
+
+        print('run t-sne')        
+        tsne = TSNE(n_components=2, perplexity=25, method="barnes_hut", learning_rate=200, n_iter=1000).fit_transform(np.squeeze(features))
         
         # extract x and y coordinates representing the positions of the images on T-SNE plot
         tx = tsne[:, 0]
@@ -188,8 +188,8 @@ class T_SNE():
             im_rgb = np.transpose(im, (1,2,0)) 
             height, width, channels = im_rgb.shape
             try:
-                tsne_x_min = int((tx[i] * plot_size)) + offset
-                tsne_y_min = int((ty[i] * plot_size)) + offset
+                tsne_x_min = int(((tx[i]) * plot_size)) + offset
+                tsne_y_min = int(((1.0 - ty[i]) * plot_size)) + offset
             except:
                 print('error in parsing tsne data, quit, no data in: ' + self.save_dir)
                 return            

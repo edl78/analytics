@@ -11,6 +11,7 @@ services:
     network_mode: "host"    
     volumes:
       - "./code:/code"
-      - ${WEED_DATA_PATH}:/weed_data 
+      - ${WEED_DATA_PATH}:/weed_data
+      - "./model:/model"
     entrypoint: ["python3", "/code/app.py"]
     

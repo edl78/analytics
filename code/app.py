@@ -76,7 +76,8 @@ def run_tsne_on_task(task_name):
     class_map = weeds.get_object_classes_for_all_annotations()
     print('prepare t-sne task')
     tsne_save_dir = '/tsne/'+task_name_path
-    tsne = T_SNE(save_dir=tsne_save_dir)
+    tsne_model = os.environ['TSNE_MODEL']
+    tsne = T_SNE(save_dir=tsne_save_dir, model=tsne_model, model_path='/model/resnet18_model.pth')
     pickle_file_path = pickle_save_dir + '/pd.pkl'
     tsne.set_pd_dataset(pd_dataset_file=pickle_file_path, class_map=class_map)
     print('generate clusters')

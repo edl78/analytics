@@ -1,17 +1,18 @@
 import pandas
 import torch
 import torchvision.models as models
+import torch.nn as nn
 from torch.hub import load_state_dict_from_url
+import torchvision.transforms as T
 from weed_data_class import WeedData
 from torchvision import transforms
+from torchvision.models.detection.backbone_utils import resnet_fpn_backbone
 import numpy as np
-#from sklearn.manifold import TSNE
-#from tsnecuda import TSNE
 from cuml.manifold import TSNE
-#from cuml.manifold import TSNE as cumlTSNE
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 import os
+from PIL import Image
 
 #inspiration for this code comes from this place (no information regarding license): 
 #https://learnopencv.com/t-sne-for-feature-visualization
@@ -56,10 +57,40 @@ class ResNet101(models.ResNet):
         return x
 
 
+class ResNet18():
+    def __init__(self, model_path=None):        
+        self.backbone = resnet_fpn_backbone('resnet18', pretrained=True, trainable_layers=5)
+        self.model_loaded = torch.load(model_path)
+        self.pretrained_backbone = self.model_loaded.backbone
+        self.pretrained_state_dict = self.pretrained_backbone.state_dict()
+        self.backbone.load_state_dict(self.pretrained_state_dict)
+        #use transform to have equal size of feature maps in t-sne calculation
+        self.transform = T.Resize(size = (128, 128), interpolation=Image.BILINEAR)
+
+    def forward(self, x):
+        x = self.transform(x)
+        x = self.backbone.forward(x)
+        #backbone is a pyramid so concat all features        
+        x_0 = torch.flatten(x['0'], 1)
+        x_1 = torch.flatten(x['1'], 1)
+        x_2 = torch.flatten(x['2'], 1)
+        x_3 = torch.flatten(x['3'], 1)
+        x_pool = torch.flatten(x['pool'], 1)
+        x = torch.cat((x_0, x_1, x_2, x_3, x_pool), 1)
+        #x = torch.flatten(x, 1) 
+        return x
+
+    def eval(self):
+        self.backbone.eval()
+
+    def to(self, device):
+        self.backbone.to(device)
+
+
 
 #class to perform t-sne methods on annotation data
 class T_SNE():
-    def __init__(self, save_dir):
+    def __init__(self, save_dir='/tsne', model='standard', model_path='/model/resnet18_model.pth'):
         self.save_dir = save_dir 
         os.makedirs(name=self.save_dir, mode=0o755, exist_ok=True)       
         # train on the GPU or on the CPU, if a GPU is not available
@@ -67,7 +98,10 @@ class T_SNE():
         self.data_transform = transforms.Compose([transforms.Normalize(
                                         mean=[0.485, 0.456, 0.406],
                                         std=[0.229, 0.224, 0.225])])
-        self.model = ResNet101()
+        if(model=='standard'):                                        
+            self.model = ResNet101()
+        else:
+            self.model = ResNet18(model_path=model_path)
         self.model.eval()
         self.model.to(self.device)
         self.dataset = None
@@ -116,12 +150,18 @@ class T_SNE():
                 labels.append(label_map[label_cpu])
         
         except (FileNotFoundError, TypeError) as e:
+            print(e)
             print('error reading img file on path', flush=True)
             raise FileNotFoundError
             
 
-        print('run t-sne')        
-        tsne = TSNE(n_components=2, perplexity=25, method="barnes_hut", learning_rate=200, n_iter=1000).fit_transform(np.squeeze(features))
+        print('run t-sne')
+        features2d = np.zeros((len(features), len(np.squeeze(features[0]))))
+        i = 0
+        for feat in features:
+            features2d[i,:] = np.array(np.squeeze(feat))
+            i+=1
+        tsne = TSNE(n_components=2, perplexity=5, method="fft", learning_rate=1000, n_iter=500000).fit_transform(features2d)
         
         # extract x and y coordinates representing the positions of the images on T-SNE plot
         tx = tsne[:, 0]
@@ -212,6 +252,7 @@ class T_SNE():
         
 
 def main():
+    #for isolated testing
     t_sne = T_SNE(save_dir='/tsne')
     t_sne.set_pd_dataset('/pickled_weed/pd.pkl')
     t_sne.generate_clusters()    

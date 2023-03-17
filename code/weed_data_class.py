@@ -15,7 +15,7 @@ class WeedData(Dataset):
     def __getitem__(self, idx):       
         entry = self.df.iloc[idx]  
         box = entry["points"]
-        #print(entry['shape_type'])
+        #print(entry['shape_types'])
         #print(box)
         xmin=0
         xmax=0
@@ -33,12 +33,12 @@ class WeedData(Dataset):
         except (FileNotFoundError, TypeError) as e:
             print(e, flush=True)
             raise FileNotFoundError
-        if(entry['shape_type'] == 'rectangle'):
+        if(entry['shape_types'] == 'rectangle'):
             xmin = float(box["xmin"])
             xmax = float(box["xmax"])
             ymin = float(box["ymin"])
             ymax = float(box["ymax"])
-        elif(entry['shape_type'] == 'polygon' or entry['shape_type'] == 'points'):
+        elif(entry['shape_types'] == 'polygon' or entry['shape_types'] == 'points'):
             #take extreme points from polygon and create a new box
             x_points = box[0:len(box):2]
             y_points = box[1:len(box):2]
@@ -48,7 +48,7 @@ class WeedData(Dataset):
             ymax = y_points[np.argmax(y_points)]
         else:
             print('unhandled type')
-            print(entry['shape_type'])
+            print(entry['shape_types'])
 
         label = entry["object_class"]
         #use index as int representation of object_class
@@ -88,12 +88,12 @@ class WeedData(Dataset):
         ymin=0
         ymax=0
         
-        if(entry['shape_type'] == 'rectangle'):
+        if(entry['shape_types'] == 'rectangle'):
             xmin = float(box["xmin"])
             xmax = float(box["xmax"])
             ymin = float(box["ymin"])
             ymax = float(box["ymax"])
-        elif(entry['shape_type'] == 'polygon' or entry['shape_type'] == 'points'):
+        elif(entry['shape_types'] == 'polygon' or entry['shape_types'] == 'points'):
             #take extreme points from polygon and create a new box
             x_points = box[0:len(box):2]
             y_points = box[1:len(box):2]

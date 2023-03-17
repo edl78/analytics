@@ -31,17 +31,17 @@ class PickledWeed():
             dataEntry['task_name'] = annotation['task_name'] 
             dataEntry['object_class'] = annotation['object_class']
             
-            if(annotation['shape_type'] == 'rectangle'): 
+            if(annotation['shape_types'] == 'rectangle'): 
                 dataEntry['points'] = {
                     'xmin': annotation['points'][0],
                     'ymin': annotation['points'][1],
                     'xmax': annotation['points'][2],
                     'ymax': annotation['points'][3]
                 }
-            elif(annotation['shape_type'] == 'polygon' or annotation['shape_type'] == 'points'):
+            elif(annotation['shape_types'] == 'polygon' or annotation['shape_types'] == 'points'):
                 dataEntry['points'] = annotation['points']                
 
-            dataEntry['shape_type'] = annotation['shape_type']              
+            dataEntry['shape_types'] = annotation['shape_types']              
             dataEntry['img_path'] = self.dataset_dir + '/' + annotation['img_path']
             dataEntry['img_width'] = annotation['img_width']
             dataEntry['img_height'] = annotation['img_height']

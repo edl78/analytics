@@ -3,15 +3,17 @@ version: '3.4'
 services:
   analytics:
     runtime: nvidia
-    shm_size: 4g
+    shm_size: 24g
     env_file:
       - env.list
     image: analytics:v2
     container_name: analytics
-    network_mode: "host"    
+    #network_mode: "host"    
     volumes:
       - "./code:/code"
       - ${WEED_DATA_PATH}:/weed_data
       - "./model:/model"
+    ports:
+      - ${ANALYTICS_PORT}:${ANALYTICS_PORT}
     entrypoint: ["python3", "/code/app.py"]
     

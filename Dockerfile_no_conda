@@ -1,19 +1,19 @@
-#FROM nvidia/cuda:11.0.3-cudnn8-devel-ubuntu18.04
-#FROM nvidia/cuda:11.0.3-devel-ubuntu20.04
-#FROM nvidia/cuda:11.0.3-cudnn8-devel-ubuntu20.04
 FROM nvidia/cuda:11.5.1-cudnn8-devel-ubuntu20.04
 
 RUN apt-get update
 RUN apt-get install -y apt-utils
 RUN apt-get install -y python3-pip
 RUN pip3 install --upgrade pip
-#RUN pip3 install -U pip
 RUN apt-get install -y wget
 
 COPY requirements_no_conda.txt /code/requirements_no_conda.txt
 RUN pip3 install -U pip && pip3 install -r /code/requirements_no_conda.txt
-#RUN pip3 uninstall --yes cupy-cuda115; pip3 install cupy-cuda11x
 
-RUN pip3 install -U pip && pip3 install cudf-cu11 dask-cudf-cu11 --extra-index-url=https://pypi.ngc.nvidia.com
-RUN pip3 install -U pip && pip3 install cuml-cu11 --extra-index-url=https://pypi.ngc.nvidia.com
-RUN pip3 install -U pip && pip3 install cugraph-cu11 --extra-index-url=https://pypi.ngc.nvidia.com
+#RUN pip3 install -U pip && pip3 install cudf-cu11 dask-cudf-cu11 --extra-index-url=https://pypi.ngc.nvidia.com
+#RUN pip3 install -U pip && pip3 install cuml-cu11 --extra-index-url=https://pypi.ngc.nvidia.com
+#RUN pip3 install -U pip && pip3 install cugraph-cu11 --extra-index-url=https://pypi.ngc.nvidia.com
+
+#nvidia has experimental support for pip install so this might change again!
+RUN pip3 install cudf-cu11 dask-cudf-cu11 --extra-index-url=https://pypi.nvidia.com
+RUN pip3 install cuml-cu11 --extra-index-url=https://pypi.nvidia.com
+RUN pip3 install cugraph-cu11 --extra-index-url=https://pypi.nvidia.com

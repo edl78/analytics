@@ -12,6 +12,7 @@ services:
     volumes:
       - "./code:/code"
       - ${WEED_DATA_PATH}:/weed_data
+      - ${TSNE_DATA_PATH}:/tsne
       - "./model:/model"
     ports:
       - ${ANALYTICS_PORT}:${ANALYTICS_PORT}

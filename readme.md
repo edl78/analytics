@@ -5,6 +5,7 @@
 The feature extraction employed in the tSNE class is done by employing a resnet101 model pretrained on imagenet, i.e. non of our weed data has been used to modify it. There is also code that is currently broken (incompatibility between old torch version of model and newer version of torch employed in the code, thus the model needs updating of some layer keys etc) which could, if fixed, use the resnet18 model pre-trained on the openweeds dataset. **TBD**
 
 ## Build and run
+- Ensure that you are running this on the same machine as the MongoDB instance.
 - First fill in `env.list` with username, password and other data such as downloaded weed_data path, do not check this in.
 - Edit `.env` and set paths for `WEED_DATA_PATH` and `TSNE_DATA_PATH`.
 - Note that this service also needs access to the downloaded weed_data for analysis.

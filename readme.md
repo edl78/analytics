@@ -1,8 +1,12 @@
 # T-SNE analytics 
 - T-distributed Stochastic Neighbour Embedding. PCA-like analysis of dimensionality reduction, applied on featurespace from Resnet101 up until softmax layer. Trained on imagenet. So features are general for imagenet. Do the same analysis on fine tuned network for better class separation. The main idea here is to map clusters of data in feature space and gain insight into feature space distributions.
 
+## Note on feature extraction for tSNE
+The feature extraction employed in the tSNE class is done by employing a resnet101 model pretrained on imagenet, i.e. non of our weed data has been used to modify it. There is also code that is currently broken (incompatibility between old torch version of model and newer version of torch employed in the code, thus the model needs updating of some layer keys etc) which could, if fixed, use the resnet18 model pre-trained on the openweeds dataset. **TBD**
+
 ## Build and run
-- First fill in env.list with username, password and other data such as downloaded weed_data path, do not check this in.
+- First fill in `env.list` with username, password and other data such as downloaded weed_data path, do not check this in.
+- Edit `.env` and set paths for `WEED_DATA_PATH` and `TSNE_DATA_PATH`.
 - Note that this service also needs access to the downloaded weed_data for analysis.
 - For better separation of clusters we use the resnet18 backbone from the model trained on our weed data. Put this model in a folder called `model/`
 - To use the reset18 model fill in `TSNE_MODEL=resnet18` in the env.list file and put follow the next instuction below on model placement. If a standard resnet101 pretrained on imagenet is desired for feature extraction fill in `TSNE_MODEL=standard`

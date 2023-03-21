@@ -17,3 +17,5 @@ RUN pip3 install -U pip && pip3 install -r /code/requirements_no_conda.txt
 RUN pip3 install cudf-cu11 dask-cudf-cu11 --extra-index-url=https://pypi.nvidia.com
 RUN pip3 install cuml-cu11 --extra-index-url=https://pypi.nvidia.com
 RUN pip3 install cugraph-cu11 --extra-index-url=https://pypi.nvidia.com
+
+RUN pip3 install torch==1.12.1+cu113 torchvision==0.13.1+cu113 --extra-index-url https://download.pytorch.org/whl/cu113

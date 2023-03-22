@@ -24,3 +24,7 @@ The analytics container is built with classes for pandas dataset generation, pyt
 
 ## Example t-sne graph
 ![](doc_img/tsne_plot.png)
+
+# Academic citation
+
+Please see the [main webpage](https://openweeds.linkoping-ri.se/howtocite.html) for information on how to cite.

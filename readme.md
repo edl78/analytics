@@ -28,3 +28,7 @@ The analytics container is built with classes for pandas dataset generation, pyt
 # Academic citation
 
 Please see the [main webpage](https://openweeds.linkoping-ri.se/howtocite.html) for information on how to cite.
+
+# Issues?
+
+Please use the github issues for this repo to report any issues on it.
